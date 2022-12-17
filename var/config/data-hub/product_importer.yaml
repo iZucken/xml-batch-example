@@ -1,0 +1,165 @@
+pimcore_data_hub:
+    configurations:
+        product_importer:
+            general:
+                active: true
+                type: dataImporterDataObject
+                name: product_importer
+                description: ''
+                group: ''
+                path: null
+                modificationDate: 1671319494
+                createDate: 1671311618
+            loaderConfig:
+                type: asset
+                settings:
+                    assetPath: /products.xml
+            interpreterConfig:
+                type: xml
+                settings:
+                    xpath: /products/product
+                    schema: ''
+            resolverConfig:
+                elementType: dataObject
+                dataObjectClassId: ProductClass
+                loadingStrategy:
+                    type: attribute
+                    settings:
+                        dataSourceIndex: name
+                        attributeName: name
+                        language: ''
+                        includeUnpublished: true
+                createLocationStrategy:
+                    type: findParent
+                    settings:
+                        findStrategy: attribute
+                        attributeDataObjectClassId: ProductCategoryClass
+                        attributeName: name
+                        attributeLanguage: ''
+                        dataSourceIndex: category
+                        fallbackPath: /imported
+                locationUpdateStrategy:
+                    type: findParent
+                    settings:
+                        findStrategy: attribute
+                        attributeDataObjectClassId: ProductCategoryClass
+                        attributeName: name
+                        attributeLanguage: ''
+                        dataSourceIndex: category
+                        fallbackPath: /imported
+                publishingStrategy:
+                    type: alwaysPublish
+            processingConfig:
+                executionType: parallel
+                idDataIndex: name
+                cleanup:
+                    strategy: unpublish
+            mappingConfig:
+                -
+                    label: name-name
+                    dataSourceIndex:
+                        - name
+                    transformationResultType: default
+                    dataTarget:
+                        type: direct
+                        settings:
+                            fieldName: name
+                            language: ''
+                            writeIfTargetIsNotEmpty: true
+                            writeIfSourceIsEmpty: true
+                    transformationPipeline: {  }
+                -
+                    label: desc-desc
+                    dataSourceIndex:
+                        - description
+                    transformationResultType: default
+                    dataTarget:
+                        type: direct
+                        settings:
+                            fieldName: description
+                            language: ''
+                            writeIfTargetIsNotEmpty: true
+                            writeIfSourceIsEmpty: true
+                    transformationPipeline: {  }
+                -
+                    label: weight
+                    dataSourceIndex:
+                        - weight
+                    settings:
+                        delimiter: ' '
+                        unitSourceSelect: abbr
+                        staticUnitSelect: ''
+                    transformationResultType: quantityValue
+                    dataTarget:
+                        type: direct
+                        settings:
+                            fieldName: weight
+                            language: ''
+                            writeIfTargetIsNotEmpty: true
+                            writeIfSourceIsEmpty: true
+                    transformationPipeline:
+                        -
+                            settings:
+                                delimiter: ' '
+                            type: explode
+                        -
+                            settings:
+                                unitSourceSelect: abbr
+                                staticUnitSelect: ''
+                            type: quantityValue
+                -
+                    label: category
+                    dataSourceIndex:
+                        - category
+                    settings:
+                        loadStrategy: attribute
+                        attributeDataObjectClassId: ProductCategoryClass
+                        attributeName: name
+                        attributeLanguage: ''
+                        loadUnpublished: 'on'
+                    transformationResultType: dataObject
+                    dataTarget:
+                        type: direct
+                        settings:
+                            fieldName: category
+                            language: ''
+                            writeIfTargetIsNotEmpty: true
+                            writeIfSourceIsEmpty: true
+                    transformationPipeline:
+                        -
+                            settings:
+                                loadStrategy: attribute
+                                attributeDataObjectClassId: ProductCategoryClass
+                                attributeName: name
+                                attributeLanguage: ''
+                                loadUnpublished: 'on'
+                            type: loadDataObject
+                -
+                    label: key
+                    dataSourceIndex:
+                        - name
+                    settings:
+                        search: ' '
+                        replace: _
+                    transformationResultType: default
+                    dataTarget:
+                        type: direct
+                        settings:
+                            fieldName: key
+                            language: ''
+                            writeIfTargetIsNotEmpty: true
+                            writeIfSourceIsEmpty: true
+                    transformationPipeline:
+                        -
+                            settings:
+                                search: ' '
+                                replace: _
+                            type: stringReplace
+            executionConfig:
+                scheduleType: job
+                cronDefinition: ''
+                scheduledAt: ''
+            permissions:
+                user: {  }
+                role: {  }
+            workspaces: {  }

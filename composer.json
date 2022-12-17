@@ -12,6 +12,8 @@
         }
     },
     "require": {
+        "pimcore/data-hub": "^1.5",
+        "pimcore/data-importer": "^1.7",
         "pimcore/pimcore": "^10.5"
     },
     "require-dev": {

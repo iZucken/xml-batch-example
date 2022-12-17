@@ -7,7 +7,7 @@
  * Fields Summary:
  * - name [input]
  * - description [textarea]
- * - weight [numeric]
+ * - weight [quantityValue]
  * - category [manyToOneRelation]
  */
 
@@ -17,7 +17,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'name' => 'Product',
    'description' => '',
    'creationDate' => 0,
-   'modificationDate' => 1671305123,
+   'modificationDate' => 1671316369,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -123,7 +123,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'excludeFromSearchIndex' => false,
           )),
           2 => 
-          Pimcore\Model\DataObject\ClassDefinition\Data\Numeric::__set_state(array(
+          Pimcore\Model\DataObject\ClassDefinition\Data\QuantityValue::__set_state(array(
              'name' => 'weight',
              'title' => 'Weight',
              'tooltip' => '',
@@ -134,23 +134,31 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'style' => '',
              'permissions' => NULL,
              'datatype' => 'data',
-             'fieldtype' => 'numeric',
+             'fieldtype' => 'quantityValue',
              'relationType' => false,
              'invisible' => false,
-             'visibleGridView' => false,
+             'visibleGridView' => true,
              'visibleSearch' => false,
              'blockedVarsForExport' => 
             array (
             ),
              'width' => '',
+             'unitWidth' => '',
              'defaultValue' => NULL,
+             'defaultUnit' => 'ci_kilogram',
+             'validUnits' => 
+            array (
+              0 => 'ci_gram',
+              1 => 'ci_kilogram',
+            ),
              'integer' => false,
              'unsigned' => true,
              'minValue' => NULL,
              'maxValue' => NULL,
              'unique' => false,
              'decimalSize' => NULL,
-             'decimalPrecision' => 6,
+             'decimalPrecision' => 3,
+             'autoConvert' => false,
              'defaultValueGenerator' => '',
           )),
           3 => 
@@ -168,7 +176,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'fieldtype' => 'manyToOneRelation',
              'relationType' => true,
              'invisible' => false,
-             'visibleGridView' => false,
+             'visibleGridView' => true,
              'visibleSearch' => false,
              'blockedVarsForExport' => 
             array (
