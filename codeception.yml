@@ -11,3 +11,10 @@ bootstrap: _bootstrap.php
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+coverage:
+    enabled: true
+    include:
+        - src/*
+    exclude:
+        - src/Controller/Web2printController.php
+        - src/Kernel.php
