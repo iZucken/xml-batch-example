@@ -1,0 +1,16 @@
+actor: FunctionalTester
+modules:
+    enabled:
+        - Asserts
+        - \Helper\Functional
+        # note that \Pimcore\Tests\Helper\Pimcore requires explicit preferred-install=dist https://github.com/pimcore/pimcore/issues/10226
+        - \Pimcore\Tests\Helper\Pimcore:
+              # CAUTION: the following config means the test runner
+              # will drop and re-create the Pimcore DB and purge var/classes
+              # use only in a test setup (e.g. during CI)!
+              connect_db: true
+              initialize_db: true
+              purge_class_directory: false
+              # If true, it will create database structures for all definitions
+              setup_objects: true
+    step_decorators: ~

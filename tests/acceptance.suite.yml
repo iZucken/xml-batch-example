@@ -1,0 +1,7 @@
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://localhost/myapp
+        - \Helper\Acceptance
+step_decorators: ~        
