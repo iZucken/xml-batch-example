@@ -32,6 +32,7 @@
 
 
 /public/var/
+/public/coverage/
 /public/sitemap*.xml
 
 # PHP-CS-Fixer
@@ -40,6 +41,7 @@
 
 # composer
 /vendor/
+/cache/
 
 # PhpStorm / IDEA
 .idea
