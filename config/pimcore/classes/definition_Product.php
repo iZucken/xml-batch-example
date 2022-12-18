@@ -9,6 +9,7 @@
  * - description [textarea]
  * - weight [quantityValue]
  * - category [manyToOneRelation]
+ * - absolute_weight [calculatedValue]
  */
 
 return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -17,7 +18,7 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'name' => 'Product',
    'description' => '',
    'creationDate' => 0,
-   'modificationDate' => 1671316369,
+   'modificationDate' => 1671353019,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -200,6 +201,33 @@ return Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'documentTypes' => 
             array (
             ),
+          )),
+          4 => 
+          Pimcore\Model\DataObject\ClassDefinition\Data\CalculatedValue::__set_state(array(
+             'name' => 'absolute_weight',
+             'title' => 'Absolute  weight',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => false,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'datatype' => 'data',
+             'fieldtype' => 'calculatedValue',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => true,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'elementType' => 'input',
+             'width' => '',
+             'calculatorType' => 'class',
+             'calculatorExpression' => '',
+             'calculatorClass' => '\\App\\DataObjects\\Product\\ProductAbsoluteWeightCalculator',
+             'columnLength' => 190,
           )),
         ),
          'locked' => false,
