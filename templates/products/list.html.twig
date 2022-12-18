@@ -1,0 +1,76 @@
+{% extends 'default/layout.html.twig' %}
+
+{% block html_head %}
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.1/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.1/datatables.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <table id="productList">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Weight</th>
+            <th>
+                <label for="productCategoryFilter">Category</label>
+            </th>
+        </tr>
+        <tr class="filters">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>
+                <select id="productCategoryFilter">
+                    <option value="">...</option>
+                    {% for productCategory in productCategories %}
+                        <option value="{{ productCategory.id }}">{{ productCategory.name }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Weight</th>
+            <th>Category</th>
+        </tr>
+        </tfoot>
+    </table>
+    <script>
+        $(document).ready(function () {
+            let productCategoryFilter = document.getElementById('productCategoryFilter');
+            let datatable = $('#productList').DataTable({
+                processing: true,
+                serverSide: true,
+                orderCellsTop: true,
+                order: [],
+                ajax: {
+                    url: '/products/datatable',
+                    type: 'GET',
+                },
+                columns: [
+                    {data: "id"},
+                    {data: "name"},
+                    {data: "description", orderable: false},
+                    {data: "weight"},
+                    {data: "category"}
+                ]
+            });
+            productCategoryFilter.onchange = () => {
+                datatable
+                    .columns(4)
+                    .search(productCategoryFilter.value)
+                    .draw()
+            }
+        });
+    </script>
+{% endblock %}
