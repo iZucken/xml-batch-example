@@ -12,6 +12,6 @@ class DefaultControllerCest
     public function defaultActionTest(FunctionalTester $I)
     {
         $I->amOnPage('/');
-        $I->see('PIM products test task', 'h1');
+        $I->see('PIM test task', 'h2');
     }
 }
