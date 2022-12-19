@@ -1,102 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Example</title>
-    <style>
-        body {
-            padding:0;
-            margin: 0;
-            font-family: "Lucida Sans Unicode", Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        #site {
-            margin: 0 auto;
-            width: 1200px;
-            padding: 30px 0 0 0;
-            color:#65615E;
-        }
-
-        h1, h2, h3 {
-            font-size: 18px;
-            padding: 0 0 5px 0;
-            border-bottom: 1px solid #001428;
-            margin-bottom: 5px;
-        }
-
-        h3 {
-            font-size: 14px;
-            padding: 15px 0 5px 0;
-            margin-bottom: 5px;
-            border-color: #cccccc;
-        }
-
-        img {
-            border: 0;
-        }
-
-        p {
-            padding: 0 0 5px 0;
-        }
-
-        a {
-            color: #000;
-        }
-
-        #logo {
-            text-align: center;
-            padding: 50px 0;
-        }
-
-        #logo hr {
-            display: block;
-            height: 1px;
-            overflow: hidden;
-            background: #BBB;
-            border: 0;
-            padding:0;
-            margin:30px 0 20px 0;
-        }
-
-        #site ul {
-            padding: 10px 0 10px 20px;
-            list-style: circle;
-        }
-
-        .buttons a {
-            display: inline-block;
-            background: #6428b4;
-            color:#fff;
-            padding: 5px 10px;
-            margin-right: 10px;
-            width:40%;
-            border-radius: 2px;
-            text-decoration: none;
-        }
-
-        .buttons a:hover {
-            background: #1C8BC1;
-        }
-
-        .buttons a:last-child {
-            margin: 0;
-        }
-    </style>
+    <meta charset="utf-8">
+    <title>{% block title %}PIM test task{% endblock %}</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dashboard/dashboard.css" rel="stylesheet">
     {% block html_head %}
     {% endblock %}
 </head>
 <body>
-
-<div id="site">
-    <div id="logo">
-        <a href="/">
-        <h1>
-            PIM products test task
-        </h1>
-        </a>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">PIM test task</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') == 'app_productslist_productspage' ? 'active' }}" aria-current="page" href="/products">
+                            <span data-feather="list"></span>
+                            Explore product list
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.get('_route') == 'app_productsimport_importformview' ? 'active' }}" href="/import">
+                            <span data-feather="upload-cloud"></span>
+                            Import product data
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/coverage">
+                            <span data-feather="pie-chart"></span>
+                            View code coverage report
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">
+                            <span data-feather="tool"></span>
+                            Pimcore admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">
+                    {{ block('title') }}
+                </h1>
+            </div>
+            {{ block('content') }}
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            </footer>
+        </main>
     </div>
-    {{ block('content') }}
 </div>
 </body>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="/dashboard/dashboard.js"></script>
 </html>
