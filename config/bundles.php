@@ -1,5 +1,7 @@
 <?php
 
 return [
-    //Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
+    "Pimcore\\Bundle\\DataHubBundle\\PimcoreDataHubBundle" => ['all' => true],
+    "Pimcore\\Bundle\\DataImporterBundle\\PimcoreDataImporterBundle" => ['all' => true],
+    "Wvision\\Bundle\\DataDefinitionsBundle\\DataDefinitionsBundle" => ['all' => true],
 ];
