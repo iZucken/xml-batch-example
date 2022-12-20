@@ -35,6 +35,7 @@ services:
             - db
         volumes:
             - .:/var/www/html
+            - ./.docker/php.ini:/usr/local/etc/php/conf.d/local.ini
 
     supervisord:
         # user: '1000:1000'

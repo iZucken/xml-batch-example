@@ -1,0 +1,48 @@
+{% extends 'default/layout.html.twig' %}
+
+{% block title %}
+    Import product data
+{% endblock %}
+
+{% block content %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <p>
+        In real production environment I would consider chunking, progress feedback and resumable uploads.
+    </p>
+    <div>
+        <form id="addImportSource" action="/import/upload" method="post" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <input class="form-control" type="file" name="importSource" accept=".xml,text/xml">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <span data-feather="upload-cloud"></span>
+                    Upload source XML
+                </button>
+            </div>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">File</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for importSource in importSources %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ importSource.filename }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
