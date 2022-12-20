@@ -15,9 +15,6 @@
             {{ flashMessage }}
         </div>
     {% endfor %}
-    <p>
-        In real production environment I would consider chunking, progress feedback and resumable uploads.
-    </p>
     <div>
         <form id="addImportSource" action="/import/upload" method="post" enctype="multipart/form-data">
             <div class="input-group mb-3">
@@ -34,13 +31,32 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">File</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for importSource in importSources %}
         <tr>
-            <th scope="row">{{ loop.index }}</th>
+            <td scope="row">{{ loop.index }}</td>
             <td>{{ importSource.filename }}</td>
+            <td class="align-middle">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%">
+                        12345 items
+                    </div>
+                </div>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-primary" href="/import">
+                    <span data-feather="database"></span>
+                    Import source
+                </a>
+                <a class="btn btn-sm btn-success" href="/import" target="_blank" download>
+                    <span data-feather="download-cloud"></span>
+                    Results CSV
+                </a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>

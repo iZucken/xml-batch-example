@@ -1,2 +1,6 @@
 imports:
     - { resource: ../../config.yaml }
+
+pimcore:
+    general:
+        disable_usage_statistics: true

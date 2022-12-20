@@ -16,17 +16,27 @@ use XMLReaderNode;
 class StreamingXmlProvider extends XmlProvider
 {
     public function getData(
-        array $configuration,
+        array                     $configuration,
         ImportDefinitionInterface $definition,
-        array $params,
-        FilterInterface $filter = null
-    ): ImportDataSetInterface {
+        array                     $params,
+        FilterInterface           $filter = null
+    ): ImportDataSetInterface
+    {
         $reader = new XMLReader();
         $reader->open($this->getFile($params));
-        return new IteratorProcessorDataset(
+        $dataset = new IteratorProcessorDataset(
             new XMLElementXpathFilter(
                 new XMLElementIterator($reader),
                 $configuration['xPath']),
-            fn (XMLReaderNode $node) => (array)$node->getSimpleXMLElement());
+            fn(XMLReaderNode $node) => (array)$node->getSimpleXMLElement(),
+        );
+        if (!empty($params['offset']) || !empty($params['limit'])) {
+            return new ChunkedIteratorDataset(
+                $dataset,
+                (int)($params['offset'] ?? 0),
+                (int)($params['limit'] ?? 0),
+            );
+        }
+        return $dataset;
     }
 }
