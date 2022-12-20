@@ -11,7 +11,7 @@ class ProductAbsoluteWeightCalculator implements CalculatorClassInterface
 {
     public function compute(Concrete $object, CalculatedValue $context): string
     {
-        if ($object instanceof Product && $context->getFieldname() === 'absolute_weight') {
+        if ($object instanceof Product && $context->getFieldname() === 'absolute_weight' && $object->getWeight()) {
             $multiplier = [
                 'ci_gram' => 1,
                 'ci_kilogram' => 1000,
@@ -23,7 +23,7 @@ class ProductAbsoluteWeightCalculator implements CalculatorClassInterface
 
     public function getCalculatedValueForEditMode(Concrete $object, CalculatedValue $context): string
     {
-        if ($object instanceof Product && $context->getFieldname() === 'absolute_weight') {
+        if ($object instanceof Product && $context->getFieldname() === 'absolute_weight' && $object->getWeight()) {
             $multiplier = [
                 'ci_gram' => 1,
                 'ci_kilogram' => 1000,
