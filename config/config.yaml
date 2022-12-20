@@ -112,10 +112,6 @@ pimcore:
 #        archive_treshold: '30'
 #        archive_alternative_database: ''
 
-pimcore_data_importer:
-    messenger_queue_processing:
-        activated: true
-
 #### SYMFONY OVERRIDES
 framework:
 
