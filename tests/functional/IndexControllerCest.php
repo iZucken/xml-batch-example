@@ -4,14 +4,14 @@ namespace functional;
 
 use FunctionalTester;
 
-class DefaultControllerCest
+class IndexControllerCest
 {
     /**
-     * @covers \App\Controller\DefaultController::defaultAction
+     * @covers \App\Features\DashboardIndex\Controllers\IndexController::indexPage
      */
     public function defaultActionTest(FunctionalTester $I)
     {
         $I->amOnPage('/');
-        $I->see('PIM test task', 'h2');
+        $I->see('Тестовое задание', 'h1');
     }
 }

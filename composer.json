@@ -12,10 +12,11 @@
         }
     },
     "require": {
-        "hakre/xmlreaderiterator": "^0.1.12",
-        "pimcore/pimcore": "^10.5",
+        "ext-simplexml": "*",
         "ext-xmlreader": "*",
-        "ext-simplexml": "*"
+        "erusev/parsedown": "^1.7",
+        "hakre/xmlreaderiterator": "^0.1.12",
+        "pimcore/pimcore": "^10.5"
     },
     "require-dev": {
         "codeception/codeception": "^4.1.12",
