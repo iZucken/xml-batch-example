@@ -14,7 +14,8 @@
     "require": {
         "hakre/xmlreaderiterator": "^0.1.12",
         "pimcore/pimcore": "^10.5",
-        "w-vision/data-definitions": "^4@beta"
+        "w-vision/data-definitions": "^4@beta",
+        "ext-xmlreader": "*"
     },
     "require-dev": {
         "codeception/codeception": "^4.1.12",
