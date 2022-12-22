@@ -17,6 +17,6 @@ coverage:
         - src/*
     exclude:
         - src/Controller/Web2printController.php
-        - src/Codeception
-        - src/Migrations
+        - src/Codeception/*
+        - src/Migrations/*
         - src/Kernel.php
