@@ -7,8 +7,5 @@ services:
         autoconfigure: true
         public: false
 
-    App\Controller\:
-        resource: '../src/Controller'
-
     App\Features\:
         resource: '../src/Features/**'

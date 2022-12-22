@@ -1,10 +1,6 @@
 _pimcore:
     resource: "@PimcoreCoreBundle/Resources/config/routing.yml"
 
-app:
-    resource: "../src/Controller/"
-    type: annotation
-
 features:
     resource: "../src/Features/**/Controllers/*"
     type: annotation
