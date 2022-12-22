@@ -7,17 +7,20 @@ use FunctionalTester;
 class ProductListControllerCest
 {
     /**
-     * @covers \App\Controller\ProductsListController::productsPage
+     * @covers \App\Features\Products\Controllers\ProductsListController::__construct
+     * @covers \App\Features\Products\Controllers\ProductsListController::productsPage
      */
     public function productsPageTest(FunctionalTester $I)
     {
         $I->amOnPage('/products');
+        $I->makeHtmlSnapshot();
+        $I->seeResponseCodeIs(200);
         $I->seeElement('table#productList');
         $I->seeElement('select#productCategoryFilter');
     }
 
     /**
-     * @covers \App\Controller\ProductsListController::productsListData
+     * @covers \App\Features\Products\Controllers\ProductsListController::productsListData
      */
     public function productsListDataTest(FunctionalTester $I)
     {
@@ -25,32 +28,15 @@ class ProductListControllerCest
         $I->sendAjaxGetRequest('/products/datatable', []);
         $I->seeResponseCodeIs(200);
         $I->sendAjaxGetRequest('/products/datatable', [
-            'columns' => [['data' => 'category', 'search' => ['value' => 100]]],
+            'columns' => [['data' => 'name'], ['data' => 'category', 'search' => ['value' => 100]]],
+            'search' => ['value' => 'test'],
+            'order' => [['column' => 0]],
         ]);
         $I->seeResponseCodeIs(200);
         $I->sendAjaxGetRequest('/products/datatable', [
-            'columns' => [['data' => 'id']],
+            'columns' => [['data' => 'xxx']],
             'order' => [['column' => 0]]
         ]);
-        $I->seeResponseCodeIs(200);
-        $I->sendAjaxGetRequest('/products/datatable', [
-            'columns' => [['data' => 'name']],
-            'order' => [['column' => 0]]
-        ]);
-        $I->seeResponseCodeIs(200);
-        $I->sendAjaxGetRequest('/products/datatable', [
-            'columns' => [['data' => 'weight']],
-            'order' => [['column' => 0]]
-        ]);
-        $I->seeResponseCodeIs(200);
-        $I->sendAjaxGetRequest('/products/datatable', [
-            'columns' => [['data' => 'category']],
-            'order' => [['column' => 0]]
-        ]);
-        $I->seeResponseCodeIs(200);
-        $I->sendAjaxGetRequest('/products/datatable', [
-            'search' => ['value' => 'test']
-        ]);
-        $I->seeResponseCodeIs(200);
+        $I->seeResponseCodeIs(400);
     }
 }

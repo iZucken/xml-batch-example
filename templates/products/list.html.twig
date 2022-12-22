@@ -14,9 +14,8 @@
     <table id="productList">
         <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
-            <th>Description</th>
+            <th>Any description</th>
             <th>Weight</th>
             <th>
                 <label for="productCategoryFilter">Category</label>
@@ -26,12 +25,11 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
             <th>
                 <select id="productCategoryFilter">
                     <option value="">...</option>
                     {% for productCategory in productCategories %}
-                        <option value="{{ productCategory.id }}">{{ productCategory.name }}</option>
+                        <option value="{{ productCategory }}">{{ productCategory }}</option>
                     {% endfor %}
                 </select>
             </th>
@@ -41,9 +39,8 @@
         </tbody>
         <tfoot>
         <tr>
-            <th>ID</th>
             <th>Name</th>
-            <th>Description</th>
+            <th>Any description</th>
             <th>Weight</th>
             <th>Category</th>
         </tr>
@@ -62,16 +59,20 @@
                     type: 'GET',
                 },
                 columns: [
-                    {data: "id"},
                     {data: "name"},
-                    {data: "description", orderable: false},
+                    {
+                        render: function (data, type, row) {
+                            return row.description_common || row.description_for_ozon || row.description_for_wildberries;
+                        },
+                        orderable: false
+                    },
                     {data: "weight"},
                     {data: "category"}
                 ]
             });
             productCategoryFilter.onchange = () => {
                 datatable
-                    .columns(4)
+                    .columns(3)
                     .search(productCategoryFilter.value)
                     .draw()
             }

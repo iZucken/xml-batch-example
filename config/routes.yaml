@@ -4,3 +4,7 @@ _pimcore:
 app:
     resource: "../src/Controller/"
     type: annotation
+
+features:
+    resource: "../src/Features/**/Controllers/*"
+    type: annotation
