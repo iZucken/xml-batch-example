@@ -1,0 +1,14 @@
+actor: IntegrationTester
+modules:
+    enabled:
+        - Asserts
+        - \Helper\Unit
+        - \Pimcore\Tests\Helper\Pimcore:
+              connect_db: true
+              initialize_db: true
+              purge_class_directory: false
+              setup_objects: true
+    step_decorators: ~
+extensions:
+    enabled:
+        - \App\Codeception\DoctrineMigrationExtension
