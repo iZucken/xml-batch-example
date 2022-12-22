@@ -16,7 +16,7 @@ class DoctrineMigrationExtension extends Extension
         try {
             $this->writeln('Running Doctrine Migrations...');
             exec('bin/console doctrine:migrations:migrate --prefix=App\\\\Migrations --no-interaction', $out, $code);
-            assert($code === 0, "Migrations run with code $code");
+            assert($code === 0, "Migrations run with code $code:" . join("\n", $out));
         } catch (\Exception $e) {
             $this->writeln(
                 sprintf(
