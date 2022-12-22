@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Range;
 class ProductsIndexQuery
 {
     public function __construct(
-        #[Range(min: 10, max: 25)]
+        #[Range(min: 10, max: 100)]
         public readonly int $limit,
         #[Range(min: 0)]
         public readonly int $offset,
