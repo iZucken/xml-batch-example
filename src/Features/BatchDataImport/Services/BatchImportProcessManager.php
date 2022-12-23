@@ -11,7 +11,7 @@ class BatchImportProcessManager
     public function startImportProcess(File $file): int
     {
         $command = BatchImportCommand::getDefaultName();
-        $process = Process::fromShellCommandline("php bin/console $command {$file->getPathname()} &");
+        $process = Process::fromShellCommandline("php bin/console $command {$file->getPathname()} -r &");
         $process->setWorkingDirectory(__DIR__ . '/../../../../');
         $process->setOptions(['create_new_console' => true]);
         $process->disableOutput();

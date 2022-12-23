@@ -38,7 +38,7 @@ class BatchImportCommand extends Command
             ->setName('import:batch:simpleXmlProducts')
             ->setDescription('Run batch XML products import.')
             ->addArgument('sourceFile', InputArgument::REQUIRED)
-            ->addOption('removeSources', 'r', InputOption::VALUE_NONE | InputOption::VALUE_OPTIONAL)
+            ->addOption('removeSources', 'r', InputOption::VALUE_NONE)
         ;
     }
 
@@ -81,7 +81,7 @@ class BatchImportCommand extends Command
             error_log($exception);
             $this->import->fail($exception->getMessage());
         }
-        if ($input->hasOption('removeSources')) {
+        if ($input->getOption('removeSources')) {
             unlink($file->getPathname());
         }
         $this->logRepository->update($this->import);
