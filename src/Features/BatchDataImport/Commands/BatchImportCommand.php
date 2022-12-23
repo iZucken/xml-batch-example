@@ -39,6 +39,7 @@ class BatchImportCommand extends Command
             ->setDescription('Run batch XML products import.')
             ->addArgument('sourceFile', InputArgument::REQUIRED)
             ->addOption('removeSources', 'r', InputOption::VALUE_NONE)
+            ->addOption('batchSize', 'b', InputOption::VALUE_REQUIRED, '', 1000)
         ;
     }
 
@@ -56,35 +57,39 @@ class BatchImportCommand extends Command
         $generator = $this->batcher->getBatchGenerator(
             $file->getPathname(),
             'product',
-            1000,
+            (int)($input->getOption('batchSize')),
             __DIR__ . '/../../../../schemas/products_flexible.xsd',
         );
         $this->import = ImportLog::fromFileInfo($file);
         $this->logRepository->add($this->import);
         $reportStats = function (ImportStats $stats) use ($output) {
             pcntl_signal_dispatch();
+            if ($this->shouldStopBySignal) {
+                throw new BatchInterruptException("Stopped by signal [$this->shouldStopBySignal]");
+            }
             $this->import->updateStats($stats);
             $this->logRepository->update($this->import);
             foreach ((array)$this->import->getStats() as $stat => $value) {
                 $output->writeln("$stat: $value");
             }
-            if ($this->shouldStopBySignal) {
-                throw new BatchInterruptException("Stopped by signal $this->shouldStopBySignal");
-            }
         };
+        $hasErrors = false;
         try {
             $this->importer->importBatchStreamFromGenerator($generator, $reportStats);
             $this->import->complete();
         } catch (BatchInterruptException $exception) {
+            $output->writeln($exception->getMessage());
             $this->import->cancel($exception->getMessage());
         } catch (\Throwable $exception) {
             error_log($exception);
+            $output->writeln($exception->getMessage());
             $this->import->fail($exception->getMessage());
+            $hasErrors = true;
         }
+        $this->logRepository->update($this->import);
         if ($input->getOption('removeSources')) {
             unlink($file->getPathname());
         }
-        $this->logRepository->update($this->import);
-        return 0;
+        return $hasErrors ? 1 : 0;
     }
 }

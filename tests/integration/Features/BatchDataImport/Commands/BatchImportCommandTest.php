@@ -44,5 +44,20 @@ class BatchImportCommandTest extends Unit
         ]);
         $tester->assertCommandIsSuccessful();
         $this->assertFileDoesNotExist($tmp);
+        copy(codecept_data_dir() . "/import_sample_broken.xml", $tmp);
+        $tester->execute([
+            'sourceFile' => $tmp,
+            '--removeSources' => true,
+        ]);
+        $this->assertEquals(1, $tester->getStatusCode());
+        copy(codecept_data_dir() . "/import_sample.xml", $tmp);
+        $this->command->stopCommand(SIGHUP);
+        $tester->execute([
+            'sourceFile' => $tmp,
+            '--batchSize' => 1,
+            '--removeSources' => true,
+        ]);
+        $this->assertStringContainsString('Stopped by signal [1]', $tester->getDisplay());
+        $tester->assertCommandIsSuccessful();
     }
 }
