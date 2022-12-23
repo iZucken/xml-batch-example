@@ -50,4 +50,19 @@ class ProductImportControllerCest
         @unlink($tmp);
         FileSystem::deleteDir('/tmp/assets');
     }
+
+    /**
+     * @covers \App\Features\ProductsImport\Controllers\BatchImportController::importUpload
+     */
+    public function importUploadWorksWithSpacesInFilenameTest(FunctionalTester $I)
+    {
+        $I->amOnPage('/import');
+        $tmp = tempnam(__DIR__ . '/../_data/tmp', 'test with spaces ') . ".xml";
+        $filename = basename($tmp);
+        copy(__DIR__ . '/../_data/import_sample.xml', $tmp);
+        $I->attachFile('importSource', '/tmp/' . $filename);
+        $I->submitForm('#addImportSource', []);
+        $I->seeResponseCodeIs(200);
+        $I->see("Import process started on \"$filename\"");
+    }
 }
