@@ -16,7 +16,8 @@
         "ext-xmlreader": "*",
         "erusev/parsedown": "^1.7",
         "hakre/xmlreaderiterator": "^0.1.12",
-        "pimcore/pimcore": "^10.5"
+        "pimcore/pimcore": "^10.5",
+        "ext-pcntl": "*"
     },
     "require-dev": {
         "codeception/codeception": "^4.1.12",
