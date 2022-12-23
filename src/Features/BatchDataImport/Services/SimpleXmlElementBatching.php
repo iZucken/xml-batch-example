@@ -2,9 +2,9 @@
 
 namespace App\Features\BatchDataImport\Services;
 
-class SimpleXmlElementBatcher
+class SimpleXmlElementBatching
 {
-    public function getBatchGenerator(string $xmlSourceFilePathname, string $seekElement, int $batchSize, ?string $xmlSchemaFilePathname = null): \Generator
+    public function getBatchGenerator(string $xmlSourceFilePathname, string $seekElement, int $batchSize, ?string $xmlSchemaFilePathname = null): \Iterator
     {
         $xml = new \XMLReader;
         $xml->open($xmlSourceFilePathname);
