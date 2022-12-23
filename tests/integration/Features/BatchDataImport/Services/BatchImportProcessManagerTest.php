@@ -17,7 +17,12 @@ class BatchImportProcessManagerTest extends TestCase
     public function testStartImportProcess()
     {
         $sut = new BatchImportProcessManager();
-        $pid = $sut->startImportProcess(new File(__DIR__ . '/../../../../_data/import_sample.xml'));
+        $tmp = tempnam('/tmp', 'batch-test');
+        copy(codecept_data_dir() . '/import_sample.xml', $tmp);
+        $this->assertFileExists($tmp);
+        $pid = $sut->startImportProcess(new File($tmp));
         $this->assertIsInt($pid);
+        sleep(1);
+        $this->assertFileDoesNotExist($tmp);
     }
 }
