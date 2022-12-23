@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
@@ -32,6 +33,9 @@ class BatchImportController extends AbstractController
         try {
             /** @var UploadedFile $file */
             $file = $request->files->get('importSource');
+            if (empty($file)) {
+                throw new BadRequestHttpException("No file");
+            }
             $safeFilename = preg_replace("#[^\w\s]#", "",
                     pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . ".xml";
             if (is_file('/tmp/' . $safeFilename)) {

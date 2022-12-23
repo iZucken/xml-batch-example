@@ -4,6 +4,8 @@
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.1/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.1/datatables.min.js"></script>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 {% endblock %}
 
 {% block title %}
@@ -22,15 +24,18 @@
         </div>
     {% endfor %}
     <div>
-        <form id="addImportSource" action="/import/upload" method="post" enctype="multipart/form-data">
-            <div class="input-group mb-3">
-                <input class="form-control" type="file" name="importSource" accept=".xml,text/xml" required>
-                <button class="btn btn-outline-secondary" type="submit">
-                    <span data-feather="upload-cloud"></span>
-                    Upload source XML
-                </button>
-            </div>
-        </form>
+        <script>
+            Dropzone.options.importSourceUpload = {
+                url: "/import/upload",
+                paramName: "importSource",
+                parallelUploads: 1,
+                acceptedFiles: '.xml,text/xml',
+                chunking: false,
+                retryChunks: false,
+                maxFilesize: 1000, // MB
+            };
+        </script>
+        <form action="/import/upload" class='dropzone' id="import-source-upload"></form>
     </div>
     <table class="table" id="importLogTable">
         <thead>
