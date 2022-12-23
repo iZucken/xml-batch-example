@@ -27,15 +27,7 @@ class ProductsRepositoryTest extends Unit
 
     /**
      * @covers ::__construct
-     */
-    public function test__construct()
-    {
-        $this->assertInstanceOf(ProductsRepository::class, new ProductsRepository($this->db));
-    }
-
-    /**
      * @covers ::getAllCategoryNames
-     * @depends test__construct
      */
     public function testGetAllCategoryNames()
     {
