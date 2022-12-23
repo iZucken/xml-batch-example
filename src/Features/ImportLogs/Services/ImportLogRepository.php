@@ -25,6 +25,7 @@ class ImportLogRepository
             'updated_at' => $import->getUpdatedAt()->format('Y-m-d H:i:s'),
             'state' => $import->getState(),
             'source_filename' => $import->getSourceFilename(),
+            'status_message' => $import->getStatusMessage(),
             'stats' => $this->serializer->serialize($import->getStats(), 'json'),
         ]);
     }
@@ -35,6 +36,7 @@ class ImportLogRepository
             'updated_at' => $import->getUpdatedAt()->format('Y-m-d H:i:s'),
             'state' => $import->getState(),
             'stats' => $this->serializer->serialize($import->getStats(), 'json'),
+            'status_message' => $import->getStatusMessage(),
         ], [
             'uuid' => $import->getUuid(),
         ]);

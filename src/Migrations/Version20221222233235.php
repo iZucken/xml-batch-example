@@ -20,9 +20,10 @@ final class Version20221222233235 extends AbstractMigration
 (
     uuid            varchar(36)                             not null
         primary key,
-    started_at      timestamp default current_timestamp()   not null on update current_timestamp(),
-    updated_at      timestamp default '0000-00-00 00:00:00' not null,
+    started_at      timestamp default current_timestamp() not null,
+    updated_at      timestamp default current_timestamp() not null on update current_timestamp(),
     state           int                                     not null,
+    status_message  text                                    null,
     source_filename varchar(190)                            not null,
     stats           longtext collate utf8mb4_bin            null,
     constraint stats
