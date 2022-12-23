@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Features\ProductsImport\Controllers;
 
 use League\Flysystem\FilesystemOperator;
 use Pimcore\Controller\FrontendController;
@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
-class ProductsImportController extends FrontendController
+class BatchImportController extends FrontendController
 {
-    #[Route(path: "/import", methods: Request::METHOD_GET)]
+    #[Route(path: "/import", methods: Request::METHOD_GET, name: 'products.page.import')]
     public function importFormView(): Response
     {
         return $this->render('products/import.html.twig', [
