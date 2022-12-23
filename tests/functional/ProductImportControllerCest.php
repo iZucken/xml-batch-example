@@ -8,17 +8,16 @@ use FunctionalTester;
 class ProductImportControllerCest
 {
     /**
-     * @covers \App\Controller\ProductsImportController::importFormView
+     * @covers \App\Features\ProductsImport\Controllers\BatchImportController::importFormView
      */
     public function importFormViewOpensTest(FunctionalTester $I)
     {
         $I->amOnPage('/import');
-        $I->see("Import product data", "h2");
         $I->see("Upload source XML", "button[type=submit]");
     }
 
     /**
-     * @covers \App\Controller\ProductsImportController::importUpload
+     * @covers \App\Features\ProductsImport\Controllers\BatchImportController::importUpload
      */
     public function importUploadWorksTest(FunctionalTester $I)
     {

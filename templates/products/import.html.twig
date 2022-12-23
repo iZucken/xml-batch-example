@@ -1,5 +1,11 @@
 {% extends 'default/layout.html.twig' %}
 
+{% block html_head %}
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.1/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.1/datatables.min.js"></script>
+{% endblock %}
+
 {% block title %}
     Import product data
 {% endblock %}
@@ -31,34 +37,133 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">File</th>
-            <th scope="col">Status</th>
+            <th scope="col">Size</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
         {% for importSource in importSources %}
-        <tr>
-            <td scope="row">{{ loop.index }}</td>
-            <td>{{ importSource.filename }}</td>
-            <td class="align-middle">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%">
-                        12345 items
-                    </div>
-                </div>
-            </td>
-            <td>
-                <a class="btn btn-sm btn-primary" href="/import">
-                    <span data-feather="database"></span>
-                    Import source
-                </a>
-                <a class="btn btn-sm btn-success" href="/import" target="_blank" download>
-                    <span data-feather="download-cloud"></span>
-                    Results CSV
-                </a>
-            </td>
-        </tr>
+            <tr>
+                <td scope="row">{{ loop.index }}</td>
+                <td>{{ importSource.filename }}</td>
+                <td>{{ importSource.filesize }}</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="/import">
+                        <span data-feather="database"></span>
+                        Import source
+                    </a>
+                    <a class="btn btn-sm btn-danger" href="/import">
+                        <span data-feather="trash"></span>
+                        Delete
+                    </a>
+                </td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>
+    <table class="table" id="importLogTable">
+        <thead>
+        <tr>
+            <th scope="col">Source</th>
+            <th scope="col">Started</th>
+            <th scope="col">Status</th>
+            <th scope="col" style="width: 40%">Progress</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function () {
+            function statusColor(status) {
+                switch (status) {
+                    case 1:
+                        return 'secondary';
+                    case 2:
+                        return 'primary';
+                    case 3:
+                        return 'danger';
+                    case 4:
+                        return 'secondary';
+                    default:
+                        return '';
+                }
+            }
+
+            let datatable = $('#importLogTable').DataTable({
+                processing: false,
+                paging: false,
+                searching: false,
+                ordering: false,
+                serverSide: true,
+                orderCellsTop: true,
+                order: [],
+                ajax: {
+                    url: '/importLog/datatable',
+                    type: 'GET',
+                },
+                columns: [
+                    {data: "sourceFilename", className: 'align-middle'},
+                    {data: "startedAt", className: 'align-middle'},
+                    {
+                        render: (data, type, row) => {
+                            let mainStatus = statusColor(row.state);
+                            let shortStateMessage = row.state === 1 ? 'Processing'
+                                : row.state === 2 ? 'Completed'
+                                    : row.state === 3 ? 'Error'
+                                        : row.state === 4 ? 'Cancelled'
+                                            : `Invalid state ${row.state}`
+                            return `<span class="badge bg-${mainStatus}" title="${row.statusMessage}">${shortStateMessage}</span>`;
+                        }, className: 'align-middle'
+                    },
+                    {
+                        className: 'align-middle',
+                        render: (data, type, row) => {
+                            let animate = row.state === 1 ? 'progress-bar-striped progress-bar-animated' : ''
+                            let skipped = row.stats.discovered - (row.stats.created + row.stats.updated + row.stats.malformed)
+                            let skippedPercentile = skipped / row.stats.discovered * 100
+                            let createdPercentile = row.stats.created / row.stats.discovered * 100
+                            let updatedPercentile = row.stats.updated / row.stats.discovered * 100
+                            let malformedPercentile = row.stats.malformed / row.stats.discovered * 100
+                            let mainStatus = row.state === 3 ? 'danger'
+                                : row.state === 1 ? 'secondary'
+                                    : row.state === 4 ? 'secondary' : '';
+                            return `<div class="progress">
+                            <div class="progress-bar bg-${mainStatus} ${animate}" style="width: ${skippedPercentile}%" title="Skipped records (no changes)">
+                                ${skipped}
+                            </div>
+                            <div class="progress-bar bg-info ${animate}" style="width: ${updatedPercentile}%" title="Updated records">
+                                ${row.stats.updated}
+                            </div>
+                            <div class="progress-bar bg-success ${animate}" style="width: ${createdPercentile}%" title="Added records">
+                                ${row.stats.created}
+                            </div>
+                            <div class="progress-bar bg-warning ${animate}" style="width: ${malformedPercentile}%" title="Records that contain format errors">
+                                ${row.stats.malformed}
+                            </div>
+                        </div>`
+                        }
+                    },
+                    {
+                        className: 'align-middle',
+                        render: (data, type, row) => row.state !== 1 ? `<a class="btn btn-sm btn-primary" href="/importLog/${row.uuid}/csv" target="_blank" download>
+                            <span data-feather="download-cloud"></span>
+                            Download CSV
+                        </a>` : ''
+                    },
+                ]
+            });
+            setInterval(function () {
+                datatable.ajax.reload();
+            }, 1500);
+        });
+    </script>
 {% endblock %}
