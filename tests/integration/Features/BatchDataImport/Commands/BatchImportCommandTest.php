@@ -50,6 +50,16 @@ class BatchImportCommandTest extends Unit
             '--removeSources' => true,
         ]);
         $this->assertEquals(1, $tester->getStatusCode());
+    }
+
+    /**
+     * @covers ::stopCommand
+     * @covers ::execute
+     */
+    public function testStopCommand()
+    {
+        $tester = new CommandTester($this->command);
+        $tmp = tempnam("/tmp", "batch-test-");
         copy(codecept_data_dir() . "/import_sample.xml", $tmp);
         $this->command->stopCommand(SIGHUP);
         $tester->execute([
