@@ -13,19 +13,9 @@
 {% endblock %}
 
 {% block content %}
-    {% for flashMessage in app.session.flashbag.get('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ flashMessage }}
-        </div>
-    {% endfor %}
-    {% for flashMessage in app.session.flashbag.get('error') %}
-        <div class="alert alert-danger" role="alert">
-            {{ flashMessage }}
-        </div>
-    {% endfor %}
     <div>
         <script>
-            Dropzone.options.importSourceUpload = {
+            Dropzone.options.addImportSource = {
                 url: "/import/upload",
                 paramName: "importSource",
                 parallelUploads: 1,
@@ -35,8 +25,11 @@
                 maxFilesize: 1000, // MB
             };
         </script>
-        <form action="/import/upload" class='dropzone' id="import-source-upload"></form>
+        <form action="/import/upload" method="post" class='dropzone' id="addImportSource">
+            <input type="file" name='importSource' style="display: none" required>
+        </form>
     </div>
+    <div id="alerts"></div>
     <table class="table" id="importLogTable">
         <thead>
         <tr>

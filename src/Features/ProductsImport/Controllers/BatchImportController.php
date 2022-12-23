@@ -30,27 +30,21 @@ class BatchImportController extends AbstractController
     #[Route(path: "/import/upload", methods: Request::METHOD_POST)]
     public function importUpload(Request $request): Response
     {
-        try {
-            /** @var UploadedFile $file */
-            $file = $request->files->get('importSource');
-            if (empty($file)) {
-                throw new BadRequestHttpException("No file");
-            }
-            $safeFilename = preg_replace("#[^\w\s]#", "",
-                    pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . ".xml";
-            if (is_file('/tmp/' . $safeFilename)) {
-                throw new \Exception("File \"$safeFilename\" already exists in the storage");
-            }
-            $realisticMime = $file->getMimeType();
-            if ($realisticMime !== 'text/xml') {
-                throw new \Exception("File is not recognized as text/xml");
-            }
-            $this->importProcessManager->startImportProcess($file->move('/tmp', $safeFilename));
-            $this->addFlash('success', "Import process started on \"$safeFilename\"");
-        } catch (Throwable $exception) {
-            error_log($exception);
-            $this->addFlash('error', $exception->getMessage());
+        /** @var UploadedFile $file */
+        $file = $request->files->get('importSource');
+        if (empty($file)) {
+            return new Response("No file", 400);
         }
-        return new RedirectResponse('/import');
+        $safeFilename = preg_replace("#[^\w\s]#", "",
+                pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . ".xml";
+        if (is_file('/tmp/' . $safeFilename)) {
+            return new Response("File \"$safeFilename\" already exists in the storage", 400);
+        }
+        $realisticMime = $file->getMimeType();
+        if ($realisticMime !== 'text/xml') {
+            return new Response("File is not recognized as text/xml", 400);
+        }
+        $this->importProcessManager->startImportProcess($file->move('/tmp', $safeFilename));
+        return new Response("Import process started on \"$safeFilename\"", 200);
     }
 }
