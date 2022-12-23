@@ -4,7 +4,7 @@ namespace App\Features\Products\Controllers;
 
 use App\Features\Products\DTO\ProductsIndexQuery;
 use App\Features\Products\Services\ProductsRepository;
-use Pimcore\Controller\FrontendController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Autoconfigure(tags: ['controller.service_arguments'])]
-class ProductsListController extends FrontendController
+class ProductsListController extends AbstractController
 {
     private ProductsRepository $repository;
     private ValidatorInterface $validator;

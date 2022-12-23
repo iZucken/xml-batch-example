@@ -3,12 +3,12 @@
 namespace App\Features\DashboardIndex\Controllers;
 
 use Parsedown;
-use Pimcore\Controller\FrontendController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class IndexController extends FrontendController
+class IndexController extends AbstractController
 {
     #[Route(path: "/", methods: Request::METHOD_GET)]
     public function indexPage(): Response
