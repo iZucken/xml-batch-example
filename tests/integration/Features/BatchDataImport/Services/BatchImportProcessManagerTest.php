@@ -29,7 +29,7 @@ class BatchImportProcessManagerTest extends Unit
     public function testStartImportProcess()
     {
         $sut = new BatchImportProcessManager();
-        $tmp = tempnam('/tmp', 'batch-test');
+        $tmp = tempnam('/tmp', 'batch-test-');
         copy(codecept_data_dir() . '/import_sample.xml', $tmp);
         $this->assertFileExists($tmp);
         $pid = $sut->startImportProcess(new File($tmp));
