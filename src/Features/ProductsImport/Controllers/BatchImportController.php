@@ -2,10 +2,8 @@
 
 namespace App\Features\ProductsImport\Controllers;
 
-use League\Flysystem\FilesystemOperator;
-use Pimcore\Controller\FrontendController;
-use Pimcore\Model\Asset;
-use Pimcore\Model\Asset\Listing;
+use App\Features\BatchDataImport\Services\BatchImportProcessManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,46 +11,38 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
-class BatchImportController extends FrontendController
+class BatchImportController extends AbstractController
 {
+    private BatchImportProcessManager $importProcessManager;
+
+    public function __construct(BatchImportProcessManager $importProcessManager)
+    {
+        $this->importProcessManager = $importProcessManager;
+    }
+
     #[Route(path: "/import", methods: Request::METHOD_GET, name: 'products.page.import')]
     public function importFormView(): Response
     {
-        return $this->render('products/import.html.twig', [
-            'importSources' => (new Listing)
-                ->setCondition('type = ?', ['text'])
-                ->setCondition('mimetype = ?', ['text/xml'])
-                ->setCondition('path = ?', ['/importSources/'])
-                ->setOrderKey('creationDate')
-                ->getAssets()
-        ]);
+        return $this->render('products/import.html.twig');
     }
 
     #[Route(path: "/import/upload", methods: Request::METHOD_POST)]
-    public function importUpload(Request $request, FilesystemOperator $pimcoreAssetStorage): Response
+    public function importUpload(Request $request): Response
     {
         try {
             /** @var UploadedFile $file */
             $file = $request->files->get('importSource');
             $safeFilename = preg_replace("#[^\w\s]#", "",
                     pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . ".xml";
-            if ($pimcoreAssetStorage->fileExists('/importSources/' . $safeFilename)) {
+            if (is_file('/tmp/' . $safeFilename)) {
                 throw new \Exception("File \"$safeFilename\" already exists in the storage");
             }
             $realisticMime = $file->getMimeType();
             if ($realisticMime !== 'text/xml') {
                 throw new \Exception("File is not recognized as text/xml");
             }
-            $stream = fopen($file->getPathname(), 'r');
-            $pimcoreAssetStorage->writeStream('/importSources/' . $safeFilename, $stream);
-            fclose($stream);
-            $newAsset = (new Asset)
-                ->setType('text')
-                ->setMimeType($realisticMime)
-                ->setParent(Asset\Service::createFolderByPath('/importSources'))
-                ->setFilename($safeFilename)
-                ->save();
-            $this->addFlash('success', "New import source added as Asset #{$newAsset->getId()} \"$safeFilename\"");
+            $this->importProcessManager->startImportProcess($file->move('/tmp', $safeFilename));
+            $this->addFlash('success', "Import process started on \"$safeFilename\"");
         } catch (Throwable $exception) {
             error_log($exception);
             $this->addFlash('error', $exception->getMessage());

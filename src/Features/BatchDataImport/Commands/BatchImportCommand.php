@@ -12,6 +12,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'import:batch:simpleXmlProducts')]
@@ -36,7 +37,9 @@ class BatchImportCommand extends Command
         $this
             ->setName('import:batch:simpleXmlProducts')
             ->setDescription('Run batch XML products import.')
-            ->addArgument('sourceFile', InputArgument::REQUIRED);
+            ->addArgument('sourceFile', InputArgument::REQUIRED)
+            ->addOption('removeSources', 'r', InputOption::VALUE_NONE | InputOption::VALUE_OPTIONAL)
+        ;
     }
 
     public function stopCommand(int $signal)
@@ -77,6 +80,9 @@ class BatchImportCommand extends Command
         } catch (\Throwable $exception) {
             error_log($exception);
             $this->import->fail($exception->getMessage());
+        }
+        if ($input->hasOption('removeSources')) {
+            unlink($file->getPathname());
         }
         $this->logRepository->update($this->import);
         return 0;

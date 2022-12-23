@@ -27,8 +27,7 @@ class ProductImportControllerCest
         copy(__DIR__ . '/../_data/import_sample.xml', $tmp);
         $I->attachFile('importSource', '/tmp/' . $filename);
         $I->submitForm('#addImportSource', []);
-        $I->see("New import source added as Asset", ".alert");
-        $I->see($filename, "td");
+        $I->see("Import process started on", ".alert");
         $I->attachFile('importSource', '/tmp/' . $filename);
         $I->submitForm('#addImportSource', []);
         $I->see("already exists", ".alert");
