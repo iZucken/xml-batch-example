@@ -6,7 +6,7 @@ use App\Features\ImportLogs\DTO\ImportStats;
 use App\Features\Products\VO\SIWeight;
 use Doctrine\DBAL\Connection;
 
-class ProductDataImporter
+class ProductBatchPersist
 {
     private Connection $connection;
 
@@ -25,7 +25,7 @@ class ProductDataImporter
     const MYSQL_ROWCOUNT_MEANS_INSERT = 1;
     const MYSQL_ROWCOUNT_MEANS_UPDATE = 2;
 
-    function batch(array $records): ImportStats
+    private function batch(array $records): ImportStats
     {
         $this->connection->beginTransaction();
         $stats = new ImportStats;

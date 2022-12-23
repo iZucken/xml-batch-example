@@ -7,7 +7,7 @@ use App\Features\ImportLogs\DTO\ImportStats;
 use App\Features\BatchDataImport\Services\SimpleXmlElementBatcher;
 use App\Features\ImportLogs\Entities\ImportLog;
 use App\Features\ImportLogs\Services\ImportLogRepository;
-use App\Features\ProductsImport\Services\ProductDataImporter;
+use App\Features\ProductsImport\Services\ProductBatchPersist;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,13 +18,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'import:batch:simpleXmlProducts')]
 class BatchImportCommand extends Command
 {
-    private ProductDataImporter $importer;
+    private ProductBatchPersist $importer;
     private SimpleXmlElementBatcher $batcher;
     private ImportLogRepository $logRepository;
     private ImportLog $import;
     private int $shouldStopBySignal = 0;
 
-    public function __construct(SimpleXmlElementBatcher $batcher, ImportLogRepository $logRepository, ProductDataImporter $importer)
+    public function __construct(SimpleXmlElementBatcher $batcher, ImportLogRepository $logRepository, ProductBatchPersist $importer)
     {
         parent::__construct();
         $this->importer = $importer;
