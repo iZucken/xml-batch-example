@@ -5,12 +5,9 @@ namespace App\Features\ProductsImport\Controllers;
 use App\Features\BatchDataImport\Services\BatchImportProcessManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 class BatchImportController extends AbstractController
 {
